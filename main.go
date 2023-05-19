@@ -18,11 +18,10 @@ import (
 )
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
-	defer cancel()
+	ctx := context.Background()
 
 	gitDir := "/tmp/confluence_dump"
-	base := "https://templates.atlassian.net/wiki"
+	base := "https://wiki.nci.nih.gov"
 	next := "/rest/api/content?limit=25"
 
 	for {
@@ -117,7 +116,7 @@ func handlePage(ctx context.Context, gitDir string, baseURL string, result ListR
 }
 
 func writePage(gitDir string, baseURL string, result ListResult, contents string) error {
-	path := filepath.Join(gitDir, strings.TrimPrefix(baseURL+result.Links.Webui, "https://"))
+	path := filepath.Join(gitDir, strings.TrimPrefix(baseURL+result.Links.Webui, "https://")) + ".html"
 	filepath.Dir(path)
 
 	err := os.MkdirAll(filepath.Dir(path), fs.FileMode(0755))
